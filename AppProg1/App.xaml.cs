@@ -1,4 +1,6 @@
-﻿namespace AppProg1;
+﻿using AppProg1.Views;
+
+namespace AppProg1;
 
 public partial class App : Application
 {
