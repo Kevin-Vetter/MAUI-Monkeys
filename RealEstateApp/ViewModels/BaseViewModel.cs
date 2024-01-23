@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 namespace RealEstateApp.ViewModels;
-public class BaseViewModel : INotifyPropertyChanged
+public class BaseViewModel : INotifyPropertyChanged 
 {
     bool isBusy = false;
     public bool IsBusy

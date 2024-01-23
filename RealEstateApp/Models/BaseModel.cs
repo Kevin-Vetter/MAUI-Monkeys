@@ -32,6 +32,8 @@ namespace RealEstateApp.Models
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
         #endregion
 
     }

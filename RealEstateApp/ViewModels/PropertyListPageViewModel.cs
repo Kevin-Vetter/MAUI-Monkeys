@@ -8,6 +8,7 @@ using System.Windows.Input;
 namespace RealEstateApp.ViewModels;
 public class PropertyListPageViewModel : BaseViewModel
 {
+    private Location _currentLocation;
     public ObservableCollection<PropertyListItem> PropertiesCollection { get; } = new();
 
     private readonly IPropertyService service;
@@ -25,6 +26,22 @@ public class PropertyListPageViewModel : BaseViewModel
         set => SetProperty(ref isRefreshing, value);
     }
 
+    private Command _sortPropertiesCommand;
+
+    public ICommand SortPropertiesCommand => _sortPropertiesCommand ??= new Command(async () => await SortPropertiesAsync());
+
+    async Task SortPropertiesAsync()
+    {
+        GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+        _currentLocation = await Geolocation.Default.GetLastKnownLocationAsync();
+        if (_currentLocation == null)
+        {
+            _currentLocation = await Geolocation.Default.GetLocationAsync(request);
+        }
+
+        await GetPropertiesAsync();
+    }
+
     private Command getPropertiesCommand;
     public ICommand GetPropertiesCommand => getPropertiesCommand ??= new Command(async () => await GetPropertiesAsync());
 
@@ -37,13 +54,25 @@ public class PropertyListPageViewModel : BaseViewModel
             IsBusy = true;
 
             List<Property> properties = service.GetProperties();
+            List<PropertyListItem> propertyListItems = new List<PropertyListItem>();
 
             if (PropertiesCollection.Count != 0)
                 PropertiesCollection.Clear();
 
             foreach (Property property in properties)
-                PropertiesCollection.Add(new PropertyListItem(property));
+            {
+                PropertyListItem item = new PropertyListItem(property);
+                if (_currentLocation != null)
+                {
+                    item.Distance = _currentLocation.CalculateDistance(property.Latitude.Value, property.Longitude.Value, DistanceUnits.Kilometers);
+                }
+                propertyListItems.Add(item);
+            }
 
+            foreach (var item in propertyListItems.OrderBy(x => x.Distance))
+            {
+                PropertiesCollection.Add(item);
+            }
         }
         catch (Exception ex)
         {

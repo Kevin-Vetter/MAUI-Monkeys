@@ -2,30 +2,27 @@
 using System.Runtime.CompilerServices;
 
 namespace RealEstateApp.Models;
-public class PropertyListItem : INotifyPropertyChanged
+public class PropertyListItem : BaseModel
 {
-    public PropertyListItem(Property property)
-    {
-        Property = property;
-    }
+
 
     private Property _property;
+    private double _distance;
 
     public Property Property
     {
         get => _property;
-        set
-        {
-            _property = value;
-            OnPropertyChanged();
-        }
+        set { SetProperty(ref _property, value); }
     }
 
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    public double Distance
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        get => _distance;
+        set { SetProperty(ref _distance, value);}
+    }
+
+    public PropertyListItem(Property property)
+    {
+        Property = property;
     }
 }
