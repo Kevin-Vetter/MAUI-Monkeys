@@ -34,7 +34,29 @@
                         </Label.FormattedText>
                     </Label>
                     <Entry FontSize="Medium" Text="{Binding Property.Address}" />
-
+                    <Label FontSize="Medium">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontFamily="mrIcons" Text="{StaticResource IconNear_me}" />
+                                <Span Text="Location*" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Label x:Name="lblLatitude" Text="{Binding Property.Latitude, StringFormat='Latitude: {0:F4}°'}" />
+                        <Label
+                            x:Name="lblLongitude"
+                            Grid.Column="1"
+                            Text="{Binding Property.Longitude, StringFormat='Longitude: {0:F4}°'}" />
+                        <Button Grid.Column="2" Command="{Binding GetCurrentLocation}">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="mrIcons"
+                                    Glyph="{StaticResource IconLocation_on}"
+                                    Size="25" />
+                            </Button.ImageSource>
+                        </Button>
+                    </Grid>
                     <Label FontFamily="FA-solid" FontSize="Medium">
                         <Label.FormattedText>
                             <FormattedString>

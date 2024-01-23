@@ -1,6 +1,7 @@
 ﻿using RealEstateApp.Models;
 using RealEstateApp.Services;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace RealEstateApp.ViewModels;
@@ -9,6 +10,16 @@ namespace RealEstateApp.ViewModels;
 [QueryProperty(nameof(Property), "MyProperty")]
 public class AddEditPropertyPageViewModel : BaseViewModel
 {
+
+    private bool _isCheckingLocation;
+
+
+    public bool IsCheckingLocation
+    {
+        get { return IsCheckingLocation; }
+        set { SetProperty(ref _isCheckingLocation, value); }
+    }
+
     readonly IPropertyService service;
 
     public AddEditPropertyPageViewModel(IPropertyService service)
@@ -68,13 +79,44 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     #endregion
 
 
+    private Command _getCurrentLocation;
+
+    public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(async () => await GetCurrentLocationAsync());
+    private async Task GetCurrentLocationAsync()
+    {
+        try
+        {
+            _isCheckingLocation = true;
+
+            GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+
+
+
+            Location location = await Geolocation.Default.GetLocationAsync(request);
+            Property.Latitude = location.Latitude;
+            Property.Longitude = location.Longitude;
+        }
+        // Catch one of the following exceptions:
+        //   FeatureNotSupportedException
+        //   FeatureNotEnabledException
+        //   PermissionException
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Exeption Thrown", ex.Message, "ok");
+        }
+        finally
+        {
+            _isCheckingLocation = false;
+        }
+    }
+
     private Command savePropertyCommand;
     public ICommand SavePropertyCommand => savePropertyCommand ??= new Command(async () => await SaveProperty());
     private async Task SaveProperty()
     {
         if (IsValid() == false)
         {
-           StatusMessage = "Please fill in all required fields";
+            StatusMessage = "Please fill in all required fields";
             StatusColor = Colors.Red;
         }
         else
