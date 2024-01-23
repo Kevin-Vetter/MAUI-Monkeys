@@ -2,6 +2,7 @@
 using RealEstateApp.Services;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows.Input;
 
 namespace RealEstateApp.ViewModels;
@@ -25,6 +26,7 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         get { return IsCheckingLocation; }
         set { SetProperty(ref _isCheckingLocation, value); }
     }
+
 
     readonly IPropertyService service;
 
@@ -103,10 +105,8 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Connection Problem", "No internet connection detected, restore connection to gain full accessibility ", "OK");
         }
 
-        Connectivity.ConnectivityChanged += async (sender, args) =>
-        {
-            await CheckConnectivityAsync();
-        };
+        Connectivity.ConnectivityChanged += async (sender, args) => await CheckConnectivityAsync();
+
     }
 
     private Command _setPropertyLocationCommand;
@@ -171,10 +171,12 @@ public class AddEditPropertyPageViewModel : BaseViewModel
 
     private Command savePropertyCommand;
     public ICommand SavePropertyCommand => savePropertyCommand ??= new Command(async () => await SaveProperty());
+
     private async Task SaveProperty()
     {
         if (IsValid() == false)
         {
+            Vibration.Vibrate(TimeSpan.FromSeconds(5));
             StatusMessage = "Please fill in all required fields";
             StatusColor = Colors.Red;
         }
@@ -196,5 +198,10 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     }
 
     private Command cancelSaveCommand;
-    public ICommand CancelSaveCommand => cancelSaveCommand ??= new Command(async () => await Shell.Current.GoToAsync(".."));
+    public ICommand CancelSaveCommand => cancelSaveCommand ??= new Command(async () =>
+    {
+        Vibration.Cancel();
+        await Shell.Current.GoToAsync("..");
+    });
+
 }
