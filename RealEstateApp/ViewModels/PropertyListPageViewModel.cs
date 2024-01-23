@@ -12,19 +12,47 @@ public class PropertyListPageViewModel : BaseViewModel
     public ObservableCollection<PropertyListItem> PropertiesCollection { get; } = new();
 
     private readonly IPropertyService service;
-
     public PropertyListPageViewModel(IPropertyService service)
     {
         Title = "Property List";
         this.service = service;
     }
+    private bool _isFlashlightOn;
 
-    bool isRefreshing;
+
+    public bool IsFlashlightOn
+    {
+        get { return _isFlashlightOn; }
+        set { SetProperty(ref _isFlashlightOn, value); }
+    }
+
+
+    bool _isRefreshing;
     public bool IsRefreshing
     {
-        get => isRefreshing;
-        set => SetProperty(ref isRefreshing, value);
+        get => _isRefreshing;
+        set => SetProperty(ref _isRefreshing, value);
     }
+
+
+    private Command _onOffFlashlightCommand;
+
+    public ICommand OnOffFlashlightCommand => _onOffFlashlightCommand ??= new Command(async () => await OnOffFlashlightAsync());
+
+    async Task OnOffFlashlightAsync()
+    {
+        if (_isFlashlightOn)
+        {
+            _isFlashlightOn = false;
+            await Flashlight.TurnOffAsync();
+        }
+        else
+        {
+            _isFlashlightOn = true;
+            await Flashlight.TurnOnAsync();
+        }
+    }
+
 
     private Command _sortPropertiesCommand;
 

@@ -15,7 +15,7 @@
     <ScrollView>
         <Grid
             Padding="15"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
             <Image
                 Grid.Row="0"
@@ -79,17 +79,25 @@
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Description:" />
+            <Button Grid.Row="6">
+                <Button.ImageSource>
+                    <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconHome}"
+                            Size="25" />
+                </Button.ImageSource>
+            </Button>
             <Label
-                Grid.Row="6"
+                Grid.Row="7"
                 Margin="0,0,0,20"
                 FontSize="14"
                 Text="{Binding Property.Description}" />
             <Label
-                Grid.Row="7"
+                Grid.Row="8"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Listed by:" />
-            <Grid Grid.Row="8" ColumnDefinitions="auto, *">
+            <Grid Grid.Row="9" ColumnDefinitions="auto, *">
                 <Image
                     Grid.Column="0"
                     Source="{Binding Agent.ImageUrl}"

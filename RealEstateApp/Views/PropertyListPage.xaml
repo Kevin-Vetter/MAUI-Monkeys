@@ -19,6 +19,14 @@
                     Size="25" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
+        <ToolbarItem Command="{Binding OnOffFlashlightCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+            FontFamily="mrIcons"
+            Glyph="{StaticResource IconFlashlight_on}"
+            Size="25" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <RefreshView Command="{Binding GetPropertiesCommand}" IsRefreshing="{Binding IsRefreshing}">
