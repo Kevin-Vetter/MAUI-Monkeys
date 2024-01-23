@@ -12,7 +12,13 @@ public class AddEditPropertyPageViewModel : BaseViewModel
 {
 
     private bool _isCheckingLocation;
+    private bool _btnHomeIsEnabled;
 
+    public bool BtnHomeIsEnabled
+    {
+        get => _btnHomeIsEnabled;
+        set { SetProperty(ref _btnHomeIsEnabled, value); }
+    }
 
     public bool IsCheckingLocation
     {
@@ -79,9 +85,33 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     #endregion
 
 
-    private Command _setPropertyLocation;
+    private Command _checkConnectivityCommand;
 
-    public ICommand SetPropertyLocation => _setPropertyLocation ??= new Command(async () => await SetPropertyLocationAsync());
+    public ICommand CheckConnectivityCommand => _checkConnectivityCommand ??= new Command(async () => await CheckConnectivityAsync());
+
+    private async Task CheckConnectivityAsync()
+    {
+        //do not use NetworkAccess.Local?
+        //https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/communication/networking?view=net-maui-8.0&tabs=android
+        if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
+        {
+            BtnHomeIsEnabled = true;
+        }
+        else
+        {
+            BtnHomeIsEnabled = false;
+            await Shell.Current.DisplayAlert("Connection Problem", "No internet connection detected, restore connection to gain full accessibility ", "OK");
+        }
+
+        Connectivity.ConnectivityChanged += async (sender, args) =>
+        {
+            await CheckConnectivityAsync();
+        };
+    }
+
+    private Command _setPropertyLocationCommand;
+
+    public ICommand SetPropertyLocationCommand => _setPropertyLocationCommand ??= new Command(async () => await SetPropertyLocationAsync());
 
     private async Task SetPropertyLocationAsync()
     {
@@ -89,7 +119,7 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         {
             if (string.IsNullOrWhiteSpace(Property.Address))
             {
-               await Shell.Current.DisplayAlert("Whopm Whopm", "Please enter an address", "ok");
+                await Shell.Current.DisplayAlert("Whopm Whopm", "Please enter an address", "ok");
             }
             else
             {
@@ -98,15 +128,15 @@ public class AddEditPropertyPageViewModel : BaseViewModel
                 Property.Longitude = location.Longitude;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await Shell.Current.DisplayAlert("Whopm Whopm", "An error wasn't handle properly", "ok :(");
         }
     }
 
-    private Command _getCurrentLocation;
+    private Command _getCurrentLocationCommand;
 
-    public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(async () => await GetCurrentLocationAsync());
+    public ICommand GetCurrentLocationCommand => _getCurrentLocationCommand ??= new Command(async () => await GetCurrentLocationAsync());
     private async Task GetCurrentLocationAsync()
     {
         try
