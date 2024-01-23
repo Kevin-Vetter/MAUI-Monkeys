@@ -79,6 +79,31 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     #endregion
 
 
+    private Command _setPropertyLocation;
+
+    public ICommand SetPropertyLocation => _setPropertyLocation ??= new Command(async () => await SetPropertyLocationAsync());
+
+    private async Task SetPropertyLocationAsync()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(Property.Address))
+            {
+               await Shell.Current.DisplayAlert("Whopm Whopm", "Please enter an address", "ok");
+            }
+            else
+            {
+                Location location = (await Geocoding.GetLocationsAsync(Property.Address)).FirstOrDefault();
+                Property.Latitude = location.Latitude;
+                Property.Longitude = location.Longitude;
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Whopm Whopm", "An error wasn't handle properly", "ok :(");
+        }
+    }
+
     private Command _getCurrentLocation;
 
     public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(async () => await GetCurrentLocationAsync());
@@ -95,6 +120,10 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             Location location = await Geolocation.Default.GetLocationAsync(request);
             Property.Latitude = location.Latitude;
             Property.Longitude = location.Longitude;
+
+            var placemarks = await Geocoding.GetPlacemarksAsync(location);
+            Placemark placemark = placemarks.FirstOrDefault();
+            Property.Address = $"{placemark.Thoroughfare} {placemark.FeatureName}, {placemark.Locality} {placemark.PostalCode} {placemark.CountryName}";
         }
         // Catch one of the following exceptions:
         //   FeatureNotSupportedException

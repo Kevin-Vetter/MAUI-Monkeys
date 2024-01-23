@@ -42,7 +42,7 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <Grid ColumnDefinitions="*,*,*">
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="5">
                         <Label x:Name="lblLatitude" Text="{Binding Property.Latitude, StringFormat='Latitude: {0:F4}°'}" />
                         <Label
                             x:Name="lblLongitude"
@@ -53,6 +53,14 @@
                                 <FontImageSource
                                     FontFamily="mrIcons"
                                     Glyph="{StaticResource IconLocation_on}"
+                                    Size="25" />
+                            </Button.ImageSource>
+                        </Button>
+                        <Button Grid.Column="3" Command="{Binding SetPropertyLocation}">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="mrIcons"
+                                    Glyph="{StaticResource IconHome}"
                                     Size="25" />
                             </Button.ImageSource>
                         </Button>

@@ -5,11 +5,11 @@ namespace RealEstateApp.Models
 {
     public class Property : BaseModel
     {
+        private string _address;
         private double? _latitude;
         private double? _longitude;
 
         public string Id { get; set; }
-        public string Address { get; set; }
         public int? Price { get; set; }
         public string Description { get; set; }
         public int? Beds { get; set; }
@@ -19,6 +19,12 @@ namespace RealEstateApp.Models
         public string AgentId { get; set; }
         public List<string> ImageUrls { get; set; }
         public string MainImageUrl => ImageUrls?.FirstOrDefault() ?? GlobalSettings.Instance.NoImageUrl;
+
+        public string Address
+        {
+            get { return _address; }
+            set { SetProperty(ref _address, value);}
+        }
 
         public double? Latitude
         {
