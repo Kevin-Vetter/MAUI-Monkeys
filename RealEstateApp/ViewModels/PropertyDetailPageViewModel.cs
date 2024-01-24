@@ -9,10 +9,22 @@ namespace RealEstateApp.ViewModels;
 public class PropertyDetailPageViewModel : BaseViewModel
 {
     private readonly IPropertyService service;
+    private CancellationTokenSource _cts;
+
     public PropertyDetailPageViewModel(IPropertyService service)
     {
         this.service = service;
+        IsSpeaking = false;
     }
+
+    private bool _isSpeaking;
+
+    public bool IsSpeaking
+    {
+        get { return _isSpeaking; }
+        set { SetProperty(ref _isSpeaking, value); }
+    }
+
 
     Property property;
     public Property Property { get => property; set { SetProperty(ref property, value); } }
@@ -28,10 +40,36 @@ public class PropertyDetailPageViewModel : BaseViewModel
         set
         {
             SetProperty(ref propertyListItem, value);
-           
+
             Property = propertyListItem.Property;
             Agent = service.GetAgents().FirstOrDefault(x => x.Id == Property.AgentId);
         }
+    }
+
+    private Command _textToSpeechCommand;
+
+    public Command TextToSpeechCommand => _textToSpeechCommand ??= new Command(async () => await TextToSpeechAsync());
+
+    async Task TextToSpeechAsync()
+    {
+        IsSpeaking = true;
+        _cts = new CancellationTokenSource();
+        await TextToSpeech.Default.SpeakAsync(Property.Description,cancelToken: _cts.Token);
+        IsSpeaking = false;
+    }
+
+    private Command _cancelTextToSpeechCommand;
+
+    public Command CancelTextToSpeechCommand => _cancelTextToSpeechCommand ??= new Command(() => CancelSpeech());
+
+
+    void CancelSpeech()
+    {
+        IsSpeaking = false;
+        if (_cts?.IsCancellationRequested ?? true)
+            return;
+
+        _cts.Cancel();
     }
 
     private Command editPropertyCommand;
