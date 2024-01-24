@@ -30,7 +30,9 @@ public static class MauiProgram
         builder.Services.AddTransient<AddEditPropertyPage>();
         builder.Services.AddTransient<AddEditPropertyPageViewModel>();
         builder.Services.AddTransient<CompassPage>();
-        builder.Services.AddTransient<CompassViewModel>();
+        builder.Services.AddTransient<CompassPageViewModel>();
+        builder.Services.AddTransient<HeightCalculatorPage>();
+        builder.Services.AddTransient<HeightCalculatorPageViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

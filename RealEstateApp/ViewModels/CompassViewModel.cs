@@ -6,16 +6,14 @@ using RealEstateApp.Views;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Android.Icu.Text.CaseMap;
-using static Android.Provider.CalendarContract;
 using System.Windows.Input;
 
 namespace RealEstateApp.ViewModels
 {
     [QueryProperty(nameof(Property), "MyProperty")]
-    public class CompassViewModel : BaseViewModel
+    public class CompassPageViewModel : BaseViewModel
     {
-        public CompassViewModel(IPropertyService service)
+        public CompassPageViewModel(IPropertyService service)
         {
             this.service = service;
         }

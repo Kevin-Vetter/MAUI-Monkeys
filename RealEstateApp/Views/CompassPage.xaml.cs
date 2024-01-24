@@ -4,8 +4,8 @@ namespace RealEstateApp.Views;
 
 public partial class CompassPage : ContentPage
 {
-	CompassViewModel _vm;
-	public CompassPage(CompassViewModel vm)
+	CompassPageViewModel _vm;
+	public CompassPage(CompassPageViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;
