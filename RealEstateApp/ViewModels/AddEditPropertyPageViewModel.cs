@@ -11,6 +11,7 @@ namespace RealEstateApp.ViewModels;
 [QueryProperty(nameof(Property), "MyProperty")]
 public class AddEditPropertyPageViewModel : BaseViewModel
 {
+    #region PROPERTIES
 
     private bool _isCheckingLocation;
     private bool _btnHomeIsEnabled;
@@ -27,18 +28,6 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         set { SetProperty(ref _isCheckingLocation, value); }
     }
 
-
-    readonly IPropertyService service;
-
-    public AddEditPropertyPageViewModel(IPropertyService service)
-    {
-        this.service = service;
-        Agents = new ObservableCollection<Agent>(service.GetAgents());
-    }
-
-    public string Mode { get; set; }
-
-    #region PROPERTIES
     public ObservableCollection<Agent> Agents { get; }
 
     private Property _property;
@@ -84,8 +73,60 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         get { return statusColor; }
         set { SetProperty(ref statusColor, value); }
     }
+    public string Mode { get; set; }
+
+    readonly IPropertyService service;
     #endregion
 
+    public AddEditPropertyPageViewModel(IPropertyService service)
+    {
+        this.service = service;
+        Agents = new ObservableCollection<Agent>(service.GetAgents());
+        WatchBattery();
+    }
+
+    private void BatterySwitch_Toggled(object sender, ToggledEventArgs e) =>
+    WatchBattery();
+
+    private bool _isBatteryWatched;
+
+    private void WatchBattery()
+    {
+
+        if (!_isBatteryWatched)
+        {
+            Battery.Default.BatteryInfoChanged += Battery_BatteryInfoChanged;
+        }
+        else
+        {
+            Battery.Default.BatteryInfoChanged -= Battery_BatteryInfoChanged;
+        }
+
+        _isBatteryWatched = !_isBatteryWatched;
+    }
+
+    private void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)
+    {
+        if (e.ChargeLevel <= 0.2)
+        {
+            StatusColor = Colors.Red;
+            if (e.State == BatteryState.Charging)
+            {
+                StatusColor = Colors.Yellow;
+            }
+            if (Battery.Default.EnergySaverStatus == EnergySaverStatus.On)
+            {
+                StatusColor = Colors.Green;
+            }
+            StatusMessage = $"{e.ChargeLevel * 100}";
+        }
+        else
+        {
+            StatusMessage = "";
+        }
+    }
+
+    #region Connectivity
 
     private Command _checkConnectivityCommand;
 
@@ -109,6 +150,9 @@ public class AddEditPropertyPageViewModel : BaseViewModel
 
     }
 
+    #endregion
+
+    #region Location
     private Command _setPropertyLocationCommand;
 
     public ICommand SetPropertyLocationCommand => _setPropertyLocationCommand ??= new Command(async () => await SetPropertyLocationAsync());
@@ -169,6 +213,9 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         }
     }
 
+    #endregion
+
+    #region Save
     private Command savePropertyCommand;
     public ICommand SavePropertyCommand => savePropertyCommand ??= new Command(async () => await SaveProperty());
 
@@ -203,5 +250,6 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         Vibration.Cancel();
         await Shell.Current.GoToAsync("..");
     });
+    #endregion
 
 }
