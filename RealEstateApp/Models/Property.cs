@@ -6,6 +6,7 @@ namespace RealEstateApp.Models
     public class Property : BaseModel
     {
         private string _address;
+        private string _aspect;
         private double? _latitude;
         private double? _longitude;
 
@@ -19,6 +20,14 @@ namespace RealEstateApp.Models
         public string AgentId { get; set; }
         public List<string> ImageUrls { get; set; }
         public string MainImageUrl => ImageUrls?.FirstOrDefault() ?? GlobalSettings.Instance.NoImageUrl;
+
+
+        public string Aspect
+        {
+            get { return _aspect; }
+            set { SetProperty(ref _aspect, value); }
+        }
+
 
         public string Address
         {

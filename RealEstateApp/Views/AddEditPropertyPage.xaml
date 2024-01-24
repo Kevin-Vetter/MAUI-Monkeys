@@ -13,6 +13,11 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding CancelSaveCommand}" Text="Cancel" />
         <ToolbarItem Command="{Binding SavePropertyCommand}" Text="Save" />
+        <ToolbarItem Command="{Binding CompassModalCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="mrIcons" Glyph="{StaticResource IconExplore}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -68,6 +73,16 @@
                             </Button.ImageSource>
                         </Button>
                     </Grid>
+                    <Label FontSize="Medium">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontFamily="mrIcons" Text="{StaticResource IconExplore}" />
+                                <Span Text=" " />
+                                <Span Text="Aspect" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Entry FontSize="Medium" Text="{Binding Property.Aspect}" />
                     <Label FontFamily="FA-solid" FontSize="Medium">
                         <Label.FormattedText>
                             <FormattedString>

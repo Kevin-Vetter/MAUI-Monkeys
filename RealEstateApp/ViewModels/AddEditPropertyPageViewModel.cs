@@ -1,5 +1,7 @@
-﻿using RealEstateApp.Models;
+﻿using Kotlin.Jvm.Internal;
+using RealEstateApp.Models;
 using RealEstateApp.Services;
+using RealEstateApp.Views;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -85,6 +87,16 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         WatchBattery();
     }
 
+    private Command _compassModalCommand;
+    public ICommand CompassModalCommand => _compassModalCommand ??= new Command(async () =>
+    {
+        await Shell.Current.GoToAsync(nameof(CompassPage), true, new Dictionary<string, object>
+        {
+            {"MyProperty", Property }
+        });
+    });
+
+    #region Battery
     private void BatterySwitch_Toggled(object sender, ToggledEventArgs e) =>
     WatchBattery();
 
@@ -125,6 +137,7 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             StatusMessage = "";
         }
     }
+    #endregion
 
     #region Connectivity
 
