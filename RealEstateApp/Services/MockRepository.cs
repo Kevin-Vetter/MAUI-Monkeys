@@ -1,4 +1,5 @@
-﻿using RealEstateApp.Models;
+﻿using Microsoft.Maui.Storage;
+using RealEstateApp.Models;
 using RealEstateApp.Services;
 using System.Diagnostics.Contracts;
 using System.Resources;
@@ -9,13 +10,29 @@ namespace RealEstateApp.Repositories
     {
         public MockRepository()
         {
-            _contractFilePath = Path.Combine(FileSystem.AppDataDirectory, "contract.pdf");
+
+            Task.Run(fileStuffAsync).Wait();
             LoadProperties();
             LoadAgents();
         }
         private List<Agent> _agents;
         private List<Property> _properties;
         private string _contractFilePath;
+
+        private async Task fileStuffAsync()
+        {
+
+            // Open the source file
+            using Stream inputStream = await FileSystem.Current.OpenAppPackageFileAsync("contract.pdf");
+
+            // Create an output filename
+            _contractFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "contract.pdf");
+
+            // Copy the file to the AppDataDirectory
+            using FileStream outputStream = File.Create(_contractFilePath);
+            await inputStream.CopyToAsync(outputStream);
+            var x = 0;
+        }
 
         public List<Agent> GetAgents() => _agents;
         public List<Property> GetProperties() => _properties;
