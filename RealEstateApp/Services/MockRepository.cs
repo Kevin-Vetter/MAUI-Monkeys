@@ -11,7 +11,7 @@ namespace RealEstateApp.Repositories
         public MockRepository()
         {
 
-            fileStuffAsync("contract.pdf");
+            Task.Run(fileStuffAsync).Wait();
             LoadProperties();
             LoadAgents();
         }
@@ -19,19 +19,18 @@ namespace RealEstateApp.Repositories
         private List<Property> _properties;
         private string _contractFilePath;
 
-        private async Task fileStuffAsync(string filename)
+        private async Task fileStuffAsync()
         {
 
             // Open the source file
-            using Stream inputStream = await FileSystem.Current.OpenAppPackageFileAsync(filename);
+            using Stream inputStream = await FileSystem.Current.OpenAppPackageFileAsync("contract.pdf");
 
             // Create an output filename
-            string targetFile = Path.Combine(FileSystem.Current.AppDataDirectory, filename);
+            _contractFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "contract.pdf");
 
             // Copy the file to the AppDataDirectory
-            using FileStream outputStream = File.Create(targetFile);
-            inputStream.CopyToAsync(outputStream);
-            _contractFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, filename);
+            using FileStream outputStream = File.Create(_contractFilePath);
+            await inputStream.CopyToAsync(outputStream);
             var x = 0;
         }
 
