@@ -167,10 +167,17 @@ About {Property.Address}
     private Command _openMapsCommand;
     public ICommand OpenMapsCommand => _openMapsCommand ??= new Command(async () =>
     {
-        await Shell.Current.GoToAsync($"{nameof(ImageListPage)}", true, new Dictionary<string, object>
+
+        Location location = new(Property.Latitude.Value, Property.Longitude.Value);
+        var options = new MapLaunchOptions { Name = Property.Address };
+
+        try
         {
-            {"MyProperty", Property }
-        });
-    }
-    );
+            await Map.Default.OpenAsync(location, options);
+        }
+        catch (Exception ex)
+        {
+            // No map application available to open
+        }
+    });
 }
