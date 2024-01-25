@@ -92,7 +92,7 @@ public class PropertyDetailPageViewModel : BaseViewModel
         });
     }
     );
-
+    #region 5.1
     private Command _emailClickCommand;
     public ICommand EmailClickCommand => _emailClickCommand ??= new Command(async () =>
     {
@@ -162,4 +162,15 @@ About {Property.Address}
         {
         }
     }
+    #endregion
+
+    private Command _openMapsCommand;
+    public ICommand OpenMapsCommand => _openMapsCommand ??= new Command(async () =>
+    {
+        await Shell.Current.GoToAsync($"{nameof(ImageListPage)}", true, new Dictionary<string, object>
+        {
+            {"MyProperty", Property }
+        });
+    }
+    );
 }
