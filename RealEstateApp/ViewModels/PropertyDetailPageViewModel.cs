@@ -81,4 +81,14 @@ public class PropertyDetailPageViewModel : BaseViewModel
             {"MyProperty", Property }
         });
     }
+
+    private Command _goToImageCommand;
+    public ICommand GoToImageCommand => _goToImageCommand ??= new Command(async () =>
+    {
+        await Shell.Current.GoToAsync($"{nameof(ImageListPage)}", true, new Dictionary<string, object>
+        {
+            {"MyProperty", Property }
+        });
+    }
+    );
 }
