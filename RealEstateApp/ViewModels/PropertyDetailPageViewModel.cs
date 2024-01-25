@@ -2,6 +2,7 @@
 using RealEstateApp.Services;
 using RealEstateApp.Views;
 using System.Windows.Input;
+using Microsoft.Maui.ApplicationModel.Communication;
 
 namespace RealEstateApp.ViewModels;
 
@@ -54,7 +55,7 @@ public class PropertyDetailPageViewModel : BaseViewModel
     {
         IsSpeaking = true;
         _cts = new CancellationTokenSource();
-        await TextToSpeech.Default.SpeakAsync(Property.Description,cancelToken: _cts.Token);
+        await TextToSpeech.Default.SpeakAsync(Property.Description, cancelToken: _cts.Token);
         IsSpeaking = false;
     }
 
@@ -91,4 +92,74 @@ public class PropertyDetailPageViewModel : BaseViewModel
         });
     }
     );
+
+    private Command _emailClickCommand;
+    public ICommand EmailClickCommand => _emailClickCommand ??= new Command(async () =>
+    {
+        if (Email.Default.IsComposeSupported)
+        {
+            var attachmentFilePath = Path.Combine(FileSystem.AppDataDirectory, "property.txt");
+            File.WriteAllText(attachmentFilePath, $"{Property.Address}");
+
+            string subject = $"Adress";
+            string body = "";
+            string[] recipients = new[] { property.Vendor.Email };
+
+            var message = new EmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                BodyFormat = EmailBodyFormat.PlainText,
+                To = new List<string>(recipients)
+            };
+            message.Attachments.Add(new EmailAttachment(attachmentFilePath));
+            await Email.Default.ComposeAsync(message);
+        }      
+    });
+
+    private Command _phoneClickCommand;
+    public ICommand PhoneClickCommand => _phoneClickCommand ??= new Command(async () =>
+    {
+        string choise = await Shell.Current.DisplayActionSheet(Property.Vendor.Phone, "Cancel", null, "Call", "SMS");
+        switch (choise)
+        {
+            case "Call":
+                DialVendor();
+                break;
+            case "SMS":
+                await SendSmS();
+                break;
+        }
+    });
+    private void DialVendor()
+    {
+        try
+        {
+            if (PhoneDialer.Default.IsSupported)
+                PhoneDialer.Default.Open(Property.Vendor.Phone);
+
+        }
+        catch (FeatureNotSupportedException)
+        {
+        }
+
+    }
+    private async Task SendSmS()
+    {
+        try
+        {
+
+            var message = new SmsMessage
+            {
+                Recipients = new List<string> {property.Vendor.Phone},
+                Body = $@"""Hello, {property.Vendor.FirstName}
+About {Property.Address}
+""".Remove('"')
+            };
+            await Sms.Default.ComposeAsync(message);
+        }
+        catch (FeatureNotSupportedException)
+        {
+        }
+    }
 }

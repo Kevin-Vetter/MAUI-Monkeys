@@ -16,7 +16,7 @@
     <ScrollView>
         <Grid
             Padding="15"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
             <Image
                 Grid.Row="0"
@@ -107,12 +107,60 @@
                 Margin="0,0,0,20"
                 FontSize="14"
                 Text="{Binding Property.Description}" />
+            <VerticalStackLayout Grid.Row="8">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    Text="Vendor:" />
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span FontFamily="mrIcons" Text="{StaticResource IconPerson}" />
+                            <Span Text=" " />
+                            <Span Text="{Binding Property.Vendor.FullName}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span FontFamily="mrIcons" Text="{StaticResource IconEmail}" />
+                            <Span Text=" " />
+                            <Span
+                                Text="{Binding Property.Vendor.Email}"
+                                TextColor="blue"
+                                TextDecorations="Underline" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding EmailClickCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span FontFamily="mrIcons" Text="{StaticResource IconPhone}" />
+                            <Span Text=" " />
+                            <Span
+                                Text="{Binding Property.Vendor.Phone}"
+                                TextColor="blue"
+                                TextDecorations="Underline" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PhoneClickCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </VerticalStackLayout>
             <Label
-                Grid.Row="8"
+                Grid.Row="9"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Listed by:" />
-            <Grid Grid.Row="9" ColumnDefinitions="auto, *">
+            <Grid Grid.Row="10" ColumnDefinitions="auto, *">
                 <Image
                     Grid.Column="0"
                     Source="{Binding Agent.ImageUrl}"
