@@ -180,4 +180,30 @@ About {Property.Address}
             // No map application available to open
         }
     });
+
+    private Command _openBrowserCommand;
+    public ICommand OpenBrowserCommand => _openBrowserCommand ??= new Command(async () =>
+    {
+        try
+        {
+            Uri uri = new Uri(property.NeighbourhoodUrl);
+            BrowserLaunchOptions options = new BrowserLaunchOptions
+            {
+                PreferredToolbarColor = Colors.White,
+                LaunchMode = BrowserLaunchMode.SystemPreferred
+            };
+            await Browser.Default.OpenAsync(uri,options);
+        }
+        catch (Exception ex)
+        {
+            // An unexpected error occurred. No browser may be installed on the device.
+        }
+    });
+
+        private Command _openContractCommand;
+    public ICommand OpenContractCommand => _openContractCommand ??= new Command(async () =>
+    {
+         await Launcher.Default.OpenAsync(new OpenFileRequest("Contract", new ReadOnlyFile(Property.ContractFilePath)));
+    });
+
 }

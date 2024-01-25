@@ -1,5 +1,7 @@
 ﻿using RealEstateApp.Models;
 using RealEstateApp.Services;
+using System.Diagnostics.Contracts;
+using System.Resources;
 
 namespace RealEstateApp.Repositories
 {
@@ -7,12 +9,13 @@ namespace RealEstateApp.Repositories
     {
         public MockRepository()
         {
+            _contractFilePath = Path.Combine(FileSystem.AppDataDirectory, "contract.pdf");
             LoadProperties();
             LoadAgents();
         }
-
         private List<Agent> _agents;
         private List<Property> _properties;
+        private string _contractFilePath;
 
         public List<Agent> GetAgents() => _agents;
         public List<Property> GetProperties() => _properties;
@@ -55,7 +58,7 @@ namespace RealEstateApp.Repositories
                 Phone = "+61423555712"
             },
             NeighbourhoodUrl = "https://en.wikipedia.org/wiki/Collaroy,_New_South_Wales",
-            
+            ContractFilePath = _contractFilePath,
             Aspect = "North"
         },
         new Property
@@ -74,7 +77,7 @@ namespace RealEstateApp.Repositories
                 Phone = "+61290014312"
             },
             NeighbourhoodUrl = "https://en.wikipedia.org/wiki/Collaroy,_New_South_Wales",
-            
+            ContractFilePath = _contractFilePath,
             Aspect = "East"
         },
         new Property
@@ -92,7 +95,7 @@ namespace RealEstateApp.Repositories
                 Phone = "0429008145"
             },
             NeighbourhoodUrl = "https://en.wikipedia.org/wiki/Collaroy,_New_South_Wales",
-            
+            ContractFilePath = _contractFilePath,
             Aspect = "South"
         },
         new Property
@@ -111,7 +114,7 @@ namespace RealEstateApp.Repositories
                 Phone = "02 8090 6412"
             },
             NeighbourhoodUrl = "https://en.wikipedia.org/wiki/Collaroy,_New_South_Wales",
-            
+            ContractFilePath = _contractFilePath,
             Aspect = "North"
         },
         new Property
@@ -129,7 +132,7 @@ namespace RealEstateApp.Repositories
                 Phone = "90541823"
             },
             NeighbourhoodUrl = "https://en.wikipedia.org/wiki/Collaroy,_New_South_Wales",
-            
+            ContractFilePath = _contractFilePath,
             Aspect = "West"
         }
     };

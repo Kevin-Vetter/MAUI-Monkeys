@@ -6,18 +6,17 @@
     xmlns:converter="clr-namespace:RealEstateApp.Converters"
     xmlns:fa="clr-namespace:FontAwesome"
     xmlns:vm="clr-namespace:RealEstateApp.ViewModels"
-    Title="{Binding Property.Address}"
+    Title="Listing"
     x:DataType="vm:PropertyDetailPageViewModel">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding OpenMapsCommand}" Text="Maps" />
         <ToolbarItem Command="{Binding EditPropertyCommand}" Text="Edit" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
         <Grid
             Padding="15"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
             <Image
                 Grid.Row="0"
@@ -79,13 +78,18 @@
                 Grid.Row="4"
                 FontSize="14"
                 Text="{Binding Property.LandSize, StringFormat='Land size: {0} &#x33a1;'}" />
+            <HorizontalStackLayout Grid.Row="5" Spacing="5">
+                <Button Command="{Binding OpenMapsCommand}" Text="Maps" />
+                <Button Command="{Binding OpenBrowserCommand}" Text="Browser" />
+                <Button Command="{Binding OpenContractCommand}" Text="Contract" />
+            </HorizontalStackLayout>
             <Label
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Description:" />
-            <HorizontalStackLayout Grid.Row="6">
+            <HorizontalStackLayout Grid.Row="7">
                 <Button Command="{Binding TextToSpeechCommand}" IsVisible="{Binding IsSpeaking, Converter={converter:InverseBoolConverter}}">
                     <Button.ImageSource>
                         <FontImageSource
@@ -104,11 +108,11 @@
                 </Button>
             </HorizontalStackLayout>
             <Label
-                Grid.Row="7"
+                Grid.Row="8"
                 Margin="0,0,0,20"
                 FontSize="14"
                 Text="{Binding Property.Description}" />
-            <VerticalStackLayout Grid.Row="8">
+            <VerticalStackLayout Grid.Row="9">
                 <Label
                     FontAttributes="Bold"
                     FontSize="14"
@@ -157,7 +161,7 @@
                 </Label>
             </VerticalStackLayout>
             <Label
-                Grid.Row="9"
+                Grid.Row="10"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Listed by:" />
