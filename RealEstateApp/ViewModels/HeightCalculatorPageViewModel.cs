@@ -43,7 +43,7 @@ namespace RealEstateApp.ViewModels
         {
             if (Measurements.Count > 0)
             {
-                return alt - Measurements.Last().HeightChange;
+                return alt - Measurements.Last().Altitude;
             }
             return 0;
         }
