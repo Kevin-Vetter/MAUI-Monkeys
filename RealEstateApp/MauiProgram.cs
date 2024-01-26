@@ -4,7 +4,6 @@ using RealEstateApp.Services;
 using RealEstateApp.ViewModels;
 using RealEstateApp.Views;
 using ZXing.Net.Maui.Controls;
-using ZXing.Net.MAUI.Controls;
 namespace RealEstateApp;
 
 public static class MauiProgram

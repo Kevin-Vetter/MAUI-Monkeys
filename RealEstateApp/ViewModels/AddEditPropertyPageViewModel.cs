@@ -1,5 +1,4 @@
-﻿using Kotlin.Jvm.Internal;
-using RealEstateApp.Models;
+﻿using RealEstateApp.Models;
 using RealEstateApp.Services;
 using RealEstateApp.Views;
 using System.Collections.ObjectModel;

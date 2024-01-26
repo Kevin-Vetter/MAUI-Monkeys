@@ -3,6 +3,11 @@ using RealEstateApp.Services;
 using RealEstateApp.Views;
 using System.Windows.Input;
 using Microsoft.Maui.ApplicationModel.Communication;
+using System.Net;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json.Nodes;
+using System.Text.Json;
+using System.Text;
 
 namespace RealEstateApp.ViewModels;
 
@@ -167,12 +172,74 @@ About {Property.Address}
     private Command _openMapsCommand;
     public ICommand OpenMapsCommand => _openMapsCommand ??= new Command(async () =>
     {
-        await Shell.Current.GoToAsync($"{nameof(ImageListPage)}", true, new Dictionary<string, object>
+
+        Location location = new(Property.Latitude.Value, Property.Longitude.Value);
+        var options = new MapLaunchOptions { Name = Property.Address };
+
+        try
         {
-            {"MyProperty", Property }
+            await Map.Default.OpenAsync(location, options);
+        }
+        catch (Exception ex)
+        {
+            // No map application available to open
+        }
+    });
+
+    private Command _openBrowserCommand;
+    public ICommand OpenBrowserCommand => _openBrowserCommand ??= new Command(async () =>
+    {
+        try
+        {
+            Uri uri = new Uri(property.NeighbourhoodUrl);
+            BrowserLaunchOptions options = new BrowserLaunchOptions
+            {
+                PreferredToolbarColor = Colors.White,
+                LaunchMode = BrowserLaunchMode.SystemPreferred
+            };
+            await Browser.Default.OpenAsync(uri,options);
+        }
+        catch (Exception ex)
+        {
+            // An unexpected error occurred. No browser may be installed on the device.
+        }
+    });
+
+        private Command _openContractCommand;
+    public ICommand OpenContractCommand => _openContractCommand ??= new Command(async () =>
+    {
+         await Launcher.Default.OpenAsync(new OpenFileRequest("Contract", new ReadOnlyFile(property.ContractFilePath)));
+    });
+
+    private Command _shareCommand;
+    public ICommand ShareCommand => _shareCommand ??= new Command(async () =>
+    {
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Title = "Share Property",
+            Uri = property.NeighbourhoodUrl,
+            Subject = "A property you may be interested in",
+            Text = $"Address: {property.Address}\nPrice: {property.Price}\nBeds: {property.Beds}\n"
         });
-    }
-    );
+    });
+
+    private Command _shareContractCommand;
+    public ICommand ShareContractCommand => _shareContractCommand ??= new Command(async () =>
+    {
+        string file = Path.Combine(FileSystem.CacheDirectory, property.ContractFilePath);
+
+        await Share.Default.RequestAsync(new ShareFileRequest
+        {
+            Title = "Share text file",
+            File = new ShareFile(file)
+        });
+    });
+
+    private Command _copyCommand;
+    public ICommand CopyCommand => _copyCommand ??= new Command(async () =>
+    {
+        await Clipboard.Default.SetTextAsync(JsonSerializer.Serialize(property));
+    });
 
     private Command _goToBarcodeScannerPage;
     public ICommand GoToBarcodeScannerPage => _goToBarcodeScannerPage ??= new Command(async () =>

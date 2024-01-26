@@ -6,7 +6,7 @@
     xmlns:converter="clr-namespace:RealEstateApp.Converters"
     xmlns:fa="clr-namespace:FontAwesome"
     xmlns:vm="clr-namespace:RealEstateApp.ViewModels"
-    Title="{Binding Property.Address}"
+    Title="Listing"
     x:DataType="vm:PropertyDetailPageViewModel">
 
     <ContentPage.ToolbarItems>
@@ -16,7 +16,7 @@
     <ScrollView>
         <Grid
             Padding="15"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
             <Image
                 Grid.Row="0"
@@ -78,13 +78,73 @@
                 Grid.Row="4"
                 FontSize="14"
                 Text="{Binding Property.LandSize, StringFormat='Land size: {0} &#x33a1;'}" />
+            <HorizontalStackLayout Grid.Row="5" Spacing="2">
+                <Button Command="{Binding OpenMapsCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconMap}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button Command="{Binding OpenBrowserCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconOpen_in_browser}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button Command="{Binding OpenContractCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconPicture_as_pdf}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <HorizontalStackLayout/>
+                <HorizontalStackLayout Grid.Row="5" Spacing="2">
+                <Button Command="{Binding ShareCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconShare}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button Command="{Binding ShareContractCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconUpload_file}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button Command="{Binding CopyCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconContent_copy}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button Command="{Binding GoToBarcodeScannerPage}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="mrIcons"
+                            Glyph="{StaticResource IconQr_code_scanner}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+            </HorizontalStackLayout>
             <Label
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Description:" />
-            <HorizontalStackLayout Grid.Row="6">
+            <HorizontalStackLayout Grid.Row="7">
                 <Button Command="{Binding TextToSpeechCommand}" IsVisible="{Binding IsSpeaking, Converter={converter:InverseBoolConverter}}">
                     <Button.ImageSource>
                         <FontImageSource
@@ -103,11 +163,11 @@
                 </Button>
             </HorizontalStackLayout>
             <Label
-                Grid.Row="7"
+                Grid.Row="8"
                 Margin="0,0,0,20"
                 FontSize="14"
                 Text="{Binding Property.Description}" />
-            <VerticalStackLayout Grid.Row="8">
+            <VerticalStackLayout Grid.Row="9">
                 <Label
                     FontAttributes="Bold"
                     FontSize="14"
@@ -156,7 +216,7 @@
                 </Label>
             </VerticalStackLayout>
             <Label
-                Grid.Row="9"
+                Grid.Row="10"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Listed by:" />
