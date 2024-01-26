@@ -173,4 +173,11 @@ About {Property.Address}
         });
     }
     );
+
+    private Command _goToBarcodeScannerPage;
+    public ICommand GoToBarcodeScannerPage => _goToBarcodeScannerPage ??= new Command(async () =>
+    {
+        await Shell.Current.GoToAsync($"{nameof(BarcodeScannerPage)}");
+    }
+    );
 }

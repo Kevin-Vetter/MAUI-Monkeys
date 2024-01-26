@@ -3,7 +3,8 @@ using RealEstateApp.Repositories;
 using RealEstateApp.Services;
 using RealEstateApp.ViewModels;
 using RealEstateApp.Views;
-
+using ZXing.Net.Maui.Controls;
+using ZXing.Net.MAUI.Controls;
 namespace RealEstateApp;
 
 public static class MauiProgram
@@ -36,6 +37,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ImageListPage>();
         builder.Services.AddTransient<ImageListPageViewModel>();
 
+        builder.UseBarcodeReader();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -12,5 +12,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(AddEditPropertyPage), typeof(AddEditPropertyPage));
 		Routing.RegisterRoute(nameof(CompassPage), typeof(CompassPage));
 		Routing.RegisterRoute(nameof(ImageListPage), typeof(ImageListPage));
+		Routing.RegisterRoute(nameof(BarcodeScannerPage), typeof(BarcodeScannerPage));
     }
 }
