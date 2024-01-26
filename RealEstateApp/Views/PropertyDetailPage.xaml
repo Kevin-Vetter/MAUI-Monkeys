@@ -103,8 +103,8 @@
                             Size="25" />
                     </Button.ImageSource>
                 </Button>
-                <HorizontalStackLayout/>
-                <HorizontalStackLayout Grid.Row="5" Spacing="2">
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="5" Spacing="2">
                 <Button Command="{Binding ShareCommand}">
                     <Button.ImageSource>
                         <FontImageSource

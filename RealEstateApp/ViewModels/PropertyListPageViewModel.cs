@@ -12,10 +12,12 @@ public class PropertyListPageViewModel : BaseViewModel
     public ObservableCollection<PropertyListItem> PropertiesCollection { get; } = new();
 
     private readonly IPropertyService service;
+    private int TimesStarted;
     public PropertyListPageViewModel(IPropertyService service)
     {
         Title = "Property List";
         this.service = service;
+        Preferences.Default.Set(nameof(TimesStarted), Preferences.Default.Get(nameof(TimesStarted), 0)+1);
     }
     private bool _isFlashlightOn;
 
